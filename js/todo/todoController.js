@@ -32,7 +32,11 @@ gTodo.controller('TodoController', function($scope) {
 
 	$scope.destroyTodo = function(entry) {
 		todoModel.destroyTodo(entry);
-	}
+	};
+
+	$scope.hasEntries = function() {
+		return todoModel.entries.length > 0;
+	};
 
 
 });

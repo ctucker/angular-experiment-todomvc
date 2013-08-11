@@ -96,4 +96,16 @@ describe('TodoController', function() {
 		});
 	});
 
+	describe('has content check', function() {
+		it('should indicate no content when there are no entries', function () {
+			expect(scope.hasEntries()).toBe(false);
+		});
+
+		it('should indicate content when there is one entry', function () {
+			scope.todo.newTodo = "new todo";
+			scope.addTodo();
+			expect(scope.hasEntries()).toBe(true);
+		});
+	});
+
 });
