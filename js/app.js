@@ -1,6 +1,2 @@
-(function( window ) {
-	'use strict';
-
-	// Your starting point. Enjoy the ride!
-
-})( window );
+// Create out root angular module and stick it in a global
+var GTodo = angular.module('todo', []);
