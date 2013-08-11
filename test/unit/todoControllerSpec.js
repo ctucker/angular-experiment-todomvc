@@ -48,4 +48,22 @@ describe('TodoController', function() {
 
 	});
 
+	describe('populated todo list', function () {
+
+		describe('removing an entry', function () {
+			it('should remove an entry from the start of the list', function() {
+				var first = { title: 'First', completed: false },
+					second = { title: 'Second', completed: false },
+					third = { title: 'Third', completed: false };
+
+				scope.todo.entries = [first, second, third];
+
+				scope.destroyTodo(first);
+
+				expect(scope.todo.entries.length).toBe(2);
+				expect(scope.todo.entries.indexOf(first)).toBe(-1);
+			});
+		});
+	});
+
 });

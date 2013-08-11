@@ -17,7 +17,10 @@ GTodo.controller('TodoController', function($scope) {
 			completed: false
 		});
 		todoModel.newTodo = null;
-	}
+	};
 
+	$scope.destroyTodo = function(entry) {
+		$scope.todo.entries.splice($scope.todo.entries.indexOf(entry), 1);
+	};
 
 });
