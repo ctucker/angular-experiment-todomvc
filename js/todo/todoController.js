@@ -1,26 +1,38 @@
-/* global GTodo */
+/* global gTodo */
 'use strict';
 
-GTodo.controller('TodoController', function($scope) {
+gTodo.controller('TodoController', function($scope) {
 
 	// Create our core model, initially with no entries
-	$scope.todo = {
-		entries : [],
-		newTodo : null // A new todo will be a fresh entry
+	var todoModel = {
+		entries: [],
+		newTodo: null, // A new todo will be a fresh entry
+
+		addTodo: function () {
+			this.entries.push({
+				title: this.newTodo,
+				completed: false
+			});
+			this.newTodo = null;
+		},
+
+		destroyTodo: function (entry) {
+			var indexOfEntry = this.entries.indexOf(entry);
+			if (indexOfEntry >= 0) {
+				this.entries.splice(indexOfEntry, 1);
+			}
+		}
 	};
 
-	$scope.addTodo = function() {
-		var todoModel = $scope.todo;
+	$scope.todo = todoModel;
 
-		todoModel.entries.push({
-			title : todoModel.newTodo,
-			completed: false
-		});
-		todoModel.newTodo = null;
+	$scope.addTodo = function() {
+		todoModel.addTodo();
 	};
 
 	$scope.destroyTodo = function(entry) {
-		$scope.todo.entries.splice($scope.todo.entries.indexOf(entry), 1);
-	};
+		todoModel.destroyTodo(entry);
+	}
+
 
 });

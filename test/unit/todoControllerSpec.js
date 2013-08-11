@@ -49,20 +49,50 @@ describe('TodoController', function() {
 	});
 
 	describe('populated todo list', function () {
+		var first = { title: 'First', completed: false },
+			second = { title: 'Second', completed: false },
+			third = { title: 'Third', completed: false };
+
+
+		beforeEach(function() {
+			scope.todo.entries = [first, second, third];
+		});
 
 		describe('removing an entry', function () {
 			it('should remove an entry from the start of the list', function() {
-				var first = { title: 'First', completed: false },
-					second = { title: 'Second', completed: false },
-					third = { title: 'Third', completed: false };
-
-				scope.todo.entries = [first, second, third];
-
 				scope.destroyTodo(first);
 
 				expect(scope.todo.entries.length).toBe(2);
 				expect(scope.todo.entries.indexOf(first)).toBe(-1);
 			});
+
+			it('should remove an entry from the middle of the list', function() {
+				scope.destroyTodo(second);
+
+				expect(scope.todo.entries.length).toBe(2);
+				expect(scope.todo.entries.indexOf(second)).toBe(-1);
+			});
+
+			it('should remove an entry from the end of the list', function() {
+				scope.destroyTodo(third);
+
+				expect(scope.todo.entries.length).toBe(2);
+				expect(scope.todo.entries.indexOf(third)).toBe(-1);
+			});
+
+			it('should remove all three entries', function() {
+				scope.destroyTodo(first);
+				scope.destroyTodo(second);
+				scope.destroyTodo(third);
+
+				expect(scope.todo.entries.length).toBe(0);
+			});
+
+			it('should silently ignore removal of non-existent entry', function() {
+				scope.destroyTodo({title : 'Nonesuch', completed: false});
+
+				expect(scope.todo.entries.length).toBe(3);
+			})
 		});
 	});
 
