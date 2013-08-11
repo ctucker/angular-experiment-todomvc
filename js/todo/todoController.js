@@ -1,7 +1,7 @@
 /* global gTodo */
 'use strict';
 
-gTodo.controller('TodoController', function($scope) {
+gTodo.controller('TodoController', function($scope, $location) {
 
 	// Create our core model, initially with no entries
 	var todoModel = {
@@ -25,6 +25,24 @@ gTodo.controller('TodoController', function($scope) {
 	};
 
 	$scope.todo = todoModel;
+	$scope.statusFilter = null;
+	$scope.location = $location;
+	if ($scope.location.path() === '' ) {
+		$scope.location.path('/');
+	}
+
+	$scope.$watch('location.path()', function(path) {
+		if (path === '/active') {
+			$scope.statusFilter = { completed : false };
+		}
+		else if (path === '/completed') {
+			$scope.statusFilter = { completed : true };
+		}
+		else {
+			$scope.statusFilter = null;
+		}
+	});
+
 
 	$scope.addTodo = function() {
 		todoModel.addTodo();

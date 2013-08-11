@@ -22,7 +22,7 @@
 				<label for="toggle-all">Mark all as complete</label>
 				<ul id="todo-list">
 					<!-- List items should get the class `editing` when editing and `completed` when marked as completed -->
-					<li ng-repeat="entry in todo.entries" ng-class="{completed : entry.completed}">
+					<li ng-repeat="entry in todo.entries | filter:statusFilter" ng-class="{completed : entry.completed}">
 						<div class="view">
 							<input class="toggle" type="checkbox" ng-model="entry.completed">
 							<label>{{ entry.title }}</label>
@@ -39,13 +39,13 @@
 				<!-- Remove this if you don't implement routing -->
 				<ul id="filters">
 					<li>
-						<a class="selected" href="#/">All</a>
+						<a ng-class="{selected : location.path() == '/'}" href="#/">All</a>
 					</li>
 					<li>
-						<a href="#/active">Active</a>
+						<a ng-class="{selected : location.path() == '/active'}" href="#/active">Active</a>
 					</li>
 					<li>
-						<a href="#/completed">Completed</a>
+						<a ng-class="{selected : location.path() == '/completed'}" href="#/completed">Completed</a>
 					</li>
 				</ul>
 				<!-- Hidden if no completed items are left ↓ -->

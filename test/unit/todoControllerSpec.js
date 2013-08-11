@@ -94,6 +94,55 @@ describe('TodoController', function() {
 				expect(scope.todo.entries.length).toBe(3);
 			})
 		});
+
+		describe('filtering the todos', function() {
+
+			var completed = { title: 'Completed', completed: true };
+
+			beforeEach(function() {
+				scope.todo.entries.push(completed);
+			});
+
+			beforeEach(inject(function($location) {
+				scope.location = $location;
+			}));
+
+			it('should have an initial filter of all', function() {
+				expect(scope.statusFilter).toBe(null);
+			});
+
+			it('should default the initial path to /', function() {
+				expect(scope.location.path()).toEqual('/');
+			});
+
+			it('should set the filter to not-completed when path is /active', function() {
+				scope.location.path("/active");
+
+				scope.$apply();
+
+				expect(scope.statusFilter).toEqual({ completed: false });
+			});
+
+			it('should set the filter to completed when path is /completed', function() {
+				scope.location.path("/completed");
+
+				scope.$apply();
+
+				expect(scope.statusFilter).toEqual({ completed: true });
+			});
+
+			it('should reset the filter to all when path is /', function() {
+				scope.location.path("/completed");
+				scope.$apply();
+
+				scope.location.path("/");
+				scope.$apply();
+
+				expect(scope.statusFilter).toEqual(null);
+			});
+
+
+		});
 	});
 
 	describe('has content check', function() {
