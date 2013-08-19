@@ -6,14 +6,19 @@ gTodo.controller('TodoController', function($scope, $location) {
 	// Create our core model, initially with no entries
 	var todoModel = {
 		entries: [],
-		newTodo: null, // A new todo will be a fresh entry
+		newTodo: '', // A new todo will be a fresh entry
 
 		addTodo: function () {
+			var title = this.newTodo.trim();
+			if (title.length == 0) {
+				return; // Don't add an empty entry
+			}
+
 			this.entries.push({
-				title: this.newTodo,
+				title: title,
 				completed: false
 			});
-			this.newTodo = null;
+			this.newTodo = '';
 		},
 
 		destroyTodo: function (entry) {

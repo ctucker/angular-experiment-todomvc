@@ -43,7 +43,21 @@ describe('TodoController', function() {
 			scope.todo.newTodo = 'todo entry';
 			scope.addTodo();
 
-			expect(scope.todo.newTodo).toBe(null);
+			expect(scope.todo.newTodo).toEqual('');
+		});
+
+		it('should trim whitespace from around the entry', function() {
+			scope.todo.newTodo = "  blank edges  ";
+			scope.addTodo();
+
+			expect(scope.todo.entries[0].title).toEqual("blank edges");
+		});
+
+		it('should not add a blank entry', function() {
+			scope.todo.newTodo = "   "; // empty entry
+			scope.addTodo();
+
+			expect(scope.todo.entries.length).toEqual(0);
 		});
 
 	});
