@@ -31,6 +31,14 @@ gTodo.controller('TodoController', function($scope, $location, filterFilter) {
 
 		recalculateRemaining: function() {
 			this.remaining = filterFilter(this.entries, { completed : false }).length
+		},
+
+		completedCount: function() {
+			return this.entries.length - this.remaining;
+		},
+
+		clearCompleted : function() {
+			this.entries = filterFilter(this.entries, { completed : false});
 		}
 	};
 
@@ -68,6 +76,18 @@ gTodo.controller('TodoController', function($scope, $location, filterFilter) {
 
 	$scope.hasEntries = function() {
 		return todoModel.entries.length > 0;
+	};
+
+	$scope.clearCompleted = function() {
+		todoModel.clearCompleted();
+	};
+
+	$scope.hasCompletedEntries = function() {
+		return todoModel.completedCount() > 0;
+	};
+
+	$scope.completedCount = function() {
+		return todoModel.completedCount();
 	};
 
 

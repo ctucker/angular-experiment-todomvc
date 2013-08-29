@@ -19,15 +19,20 @@ describe('TodoController', function() {
 		ctrl = $controller('TodoController', { $scope: scope });
 	}));
 
-	function addTodoItem(name) {
+	function addTodoItem(name, isCompleted) {
+		var addedEntry;
 		var entries = scope.todo.entries;
 		scope.todo.newTodo = name || "new todo";
 		scope.addTodo();
+		addedEntry = entries[entries.length - 1];
+		if (isCompleted) {
+			addedEntry.completed = true;
+		}
 		scope.$apply();
-		return entries[entries.length - 1];
+		return addedEntry;
 	}
 
-	describe('empty todo list', function () {
+	describe('starting with empty list', function () {
 
 		it('should initially be empty', function() {
 			// Verify that the scope's todo list is empty to start with
@@ -69,14 +74,13 @@ describe('TodoController', function() {
 
 	});
 
-	describe('populated todo list', function () {
-		var first = { title: 'First', completed: false },
-			second = { title: 'Second', completed: false },
-			third = { title: 'Third', completed: false };
-
+	describe('starting with populated list', function () {
+		var first, second, third;
 
 		beforeEach(function() {
-			scope.todo.entries = [first, second, third];
+			first = addTodoItem('First');
+			second = addTodoItem('Second');
+			third = addTodoItem('Third');
 		});
 
 		describe('removing an entry', function () {
@@ -121,6 +125,7 @@ describe('TodoController', function() {
 			var completed = { title: 'Completed', completed: true };
 
 			beforeEach(function() {
+				addTodoItem('Completed', true);
 				scope.todo.entries.push(completed);
 			});
 
@@ -163,6 +168,49 @@ describe('TodoController', function() {
 			});
 
 
+		});
+
+		describe('removing completed items', function() {
+
+			it('should not change the entries list if no items are completed', function() {
+				var entryCount = scope.todo.entries.length;
+				scope.clearCompleted();
+				expect(scope.todo.entries.length).toEqual(entryCount);
+			});
+
+			it('should remove only a completed entry', function() {
+				var completedEntry = addTodoItem("completed", true);
+				expect(scope.todo.entries).toContain(completedEntry);
+
+				scope.clearCompleted();
+				expect(scope.todo.entries).not.toContain(completedEntry)
+			});
+
+			it('should remove multiple completed entries', function() {
+				var entry1 = addTodoItem("entry1", true),
+					entry2 = addTodoItem("entry2", true);
+				expect(scope.todo.entries).toContain(entry1);
+				expect(scope.todo.entries).toContain(entry2);
+
+				scope.clearCompleted();
+				expect(scope.todo.entries).not.toContain(entry1);
+				expect(scope.todo.entries).not.toContain(entry2);
+			});
+
+			it('should have correct count of completed entries', function() {
+				var entry1 = addTodoItem("entry1", true),
+					entry2 = addTodoItem("entry2", true);
+				expect(scope.completedCount()).toEqual(2);
+			});
+
+			it('should indicate no completed entries when there are no complete entries', function() {
+				expect(scope.hasCompletedEntries()).toBe(false);
+			});
+
+			it('should indicate there are completed entries when there are complete entries', function() {
+				addTodoItem("Complete", true);
+				expect(scope.hasCompletedEntries()).toBe(true);
+			});
 		});
 	});
 
