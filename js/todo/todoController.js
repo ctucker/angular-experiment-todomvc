@@ -1,14 +1,15 @@
 /* global gTodo */
 'use strict';
 
-gTodo.controller('TodoController', function($scope, $location) {
+gTodo.controller('TodoController', function($scope, $location, filterFilter) {
 
 	// Create our core model, initially with no entries
 	var todoModel = {
 		entries: [],
 		newTodo: '', // A new todo will be a fresh entry
+		remaining : 0,
 
-		addTodo: function () {
+		addTodo: function() {
 			var title = this.newTodo.trim();
 			if (title.length == 0) {
 				return; // Don't add an empty entry
@@ -26,6 +27,10 @@ gTodo.controller('TodoController', function($scope, $location) {
 			if (indexOfEntry >= 0) {
 				this.entries.splice(indexOfEntry, 1);
 			}
+		},
+
+		recalculateRemaining: function() {
+			this.remaining = filterFilter(this.entries, { completed : false }).length
 		}
 	};
 
@@ -35,6 +40,10 @@ gTodo.controller('TodoController', function($scope, $location) {
 	if ($scope.location.path() === '' ) {
 		$scope.location.path('/');
 	}
+
+	$scope.$watch('todo', function() {
+		$scope.todo.recalculateRemaining();
+	}, true);
 
 	$scope.$watch('location.path()', function(path) {
 		if (path === '/active') {

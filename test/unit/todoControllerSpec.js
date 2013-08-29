@@ -19,6 +19,13 @@ describe('TodoController', function() {
 		ctrl = $controller('TodoController', { $scope: scope });
 	}));
 
+	function addTodoItem(name) {
+		var entries = scope.todo.entries;
+		scope.todo.newTodo = name || "new todo";
+		scope.addTodo();
+		scope.$apply();
+		return entries[entries.length - 1];
+	}
 
 	describe('empty todo list', function () {
 
@@ -165,9 +172,34 @@ describe('TodoController', function() {
 		});
 
 		it('should indicate content when there is one entry', function () {
-			scope.todo.newTodo = "new todo";
-			scope.addTodo();
+			addTodoItem();
 			expect(scope.hasEntries()).toBe(true);
+		});
+	});
+
+	describe('counts', function() {
+
+		it('should calculate 0 items remaining when there are no items in the list', function() {
+			expect(scope.todo.remaining).toEqual(0);
+		});
+
+		it('should recalculate items remaining after adding an item', function() {
+			addTodoItem();
+			expect(scope.todo.remaining).toEqual(1);
+		});
+
+		it('should recalculate items remaining after removing an item', function() {
+			var entry = addTodoItem();
+			scope.destroyTodo(entry);
+			scope.$apply();
+			expect(scope.todo.remaining).toEqual(0);
+		});
+
+		it('should recalculate items remaining after marking an entry as complete', function() {
+			var entry = addTodoItem();
+			entry.completed = true;
+			scope.$apply();
+			expect(scope.todo.remaining).toEqual(0);
 		});
 	});
 
