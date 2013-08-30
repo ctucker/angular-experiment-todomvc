@@ -1,0 +1,6 @@
+<div class="view">
+    <input class="toggle" type="checkbox" ng-model="entry.completed">
+    <label>{{ entry.title }}</label>
+    <button class="destroy" ng-click="destroyTodo(entry)"></button>
+</div>
+<input class="edit" value="{{ entry.title }}">
