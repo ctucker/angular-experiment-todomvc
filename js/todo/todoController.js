@@ -1,50 +1,13 @@
 /* global gTodo */
 'use strict';
 
-gTodo.controller('TodoController', function($scope, $location, filterFilter) {
-
-	// Create our core model, initially with no entries
-	var todoList = {
-		entries: [],
-		remaining : 0,
-
-		addTodo: function(newTodo) {
-			var title = newTodo.trim();
-			if (title.length == 0) {
-				return; // Don't add an empty entry
-			}
-
-			this.entries.push({
-				title: title,
-				completed: false
-			});
-		},
-
-		destroyTodo: function (entry) {
-			var indexOfEntry = this.entries.indexOf(entry);
-			if (indexOfEntry >= 0) {
-				this.entries.splice(indexOfEntry, 1);
-			}
-		},
-
-		recalculateRemaining: function() {
-			this.remaining = filterFilter(this.entries, { completed : false }).length
-		},
-
-		completedCount: function() {
-			return this.entries.length - this.remaining;
-		},
-
-		clearCompleted : function() {
-			this.entries = filterFilter(this.entries, { completed : false});
-		}
-	};
+gTodo.controller('TodoController', function($scope, $location, todoList) {
 
 	$scope.newTodo = {};
 	$scope.todoList = todoList;
-
 	$scope.statusFilter = null;
 	$scope.location = $location;
+
 	if ($scope.location.path() === '' ) {
 		$scope.location.path('/');
 	}
