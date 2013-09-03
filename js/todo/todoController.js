@@ -4,13 +4,12 @@
 gTodo.controller('TodoController', function($scope, $location, filterFilter) {
 
 	// Create our core model, initially with no entries
-	var todoModel = {
+	var todoList = {
 		entries: [],
-		newTodo: '', // A new todo will be a fresh entry
 		remaining : 0,
 
-		addTodo: function() {
-			var title = this.newTodo.trim();
+		addTodo: function(newTodo) {
+			var title = newTodo.trim();
 			if (title.length == 0) {
 				return; // Don't add an empty entry
 			}
@@ -19,7 +18,6 @@ gTodo.controller('TodoController', function($scope, $location, filterFilter) {
 				title: title,
 				completed: false
 			});
-			this.newTodo = '';
 		},
 
 		destroyTodo: function (entry) {
@@ -42,15 +40,17 @@ gTodo.controller('TodoController', function($scope, $location, filterFilter) {
 		}
 	};
 
-	$scope.todo = todoModel;
+	$scope.newTodo = {};
+	$scope.todoList = todoList;
+
 	$scope.statusFilter = null;
 	$scope.location = $location;
 	if ($scope.location.path() === '' ) {
 		$scope.location.path('/');
 	}
 
-	$scope.$watch('todo', function() {
-		$scope.todo.recalculateRemaining();
+	$scope.$watch('todoList', function() {
+		$scope.todoList.recalculateRemaining();
 	}, true);
 
 	$scope.$watch('location.path()', function(path) {
@@ -67,27 +67,28 @@ gTodo.controller('TodoController', function($scope, $location, filterFilter) {
 
 
 	$scope.addTodo = function() {
-		todoModel.addTodo();
+		todoList.addTodo($scope.newTodo.title);
+		$scope.newTodo = {};
 	};
 
 	$scope.destroyTodo = function(entry) {
-		todoModel.destroyTodo(entry);
+		todoList.destroyTodo(entry);
 	};
 
 	$scope.hasEntries = function() {
-		return todoModel.entries.length > 0;
+		return todoList.entries.length > 0;
 	};
 
 	$scope.clearCompleted = function() {
-		todoModel.clearCompleted();
+		todoList.clearCompleted();
 	};
 
 	$scope.hasCompletedEntries = function() {
-		return todoModel.completedCount() > 0;
+		return todoList.completedCount() > 0;
 	};
 
 	$scope.completedCount = function() {
-		return todoModel.completedCount();
+		return todoList.completedCount();
 	};
 
 

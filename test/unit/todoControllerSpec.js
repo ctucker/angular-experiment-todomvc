@@ -21,8 +21,8 @@ describe('TodoController', function() {
 
 	function addTodoItem(name, isCompleted) {
 		var addedEntry;
-		var entries = scope.todo.entries;
-		scope.todo.newTodo = name || "new todo";
+		var entries = scope.todoList.entries;
+		scope.newTodo.title = name || "new todo";
 		scope.addTodo();
 		addedEntry = entries[entries.length - 1];
 		if (isCompleted) {
@@ -36,40 +36,33 @@ describe('TodoController', function() {
 
 		it('should initially be empty', function() {
 			// Verify that the scope's todo list is empty to start with
-			expect(scope.todo.entries.length).toBe(0);
+			expect(scope.todoList.entries.length).toBe(0);
 		});
 
 		it('should have a single entry after one add', function() {
 			var entry;
 
-			scope.todo.newTodo = 'first todo entry';
-			scope.addTodo();
+			addTodoItem('first todo entry');
 
-			expect(scope.todo.entries.length).toBe(1);
-			entry = scope.todo.entries[0];
+			expect(scope.todoList.entries.length).toBe(1);
+			entry = scope.todoList.entries[0];
 			expect(entry.completed).toBe(false);
 			expect(entry.title).toBe('first todo entry');
 		});
 
 		it('should clear the entry field after creating a new entry', function () {
-			scope.todo.newTodo = 'todo entry';
-			scope.addTodo();
-
-			expect(scope.todo.newTodo).toEqual('');
+			addTodoItem('todo entry');
+			expect(scope.newTodo).toEqual({});
 		});
 
 		it('should trim whitespace from around the entry', function() {
-			scope.todo.newTodo = "  blank edges  ";
-			scope.addTodo();
-
-			expect(scope.todo.entries[0].title).toEqual("blank edges");
+			addTodoItem("  blank edges  ");
+			expect(scope.todoList.entries[0].title).toEqual("blank edges");
 		});
 
 		it('should not add a blank entry', function() {
-			scope.todo.newTodo = "   "; // empty entry
-			scope.addTodo();
-
-			expect(scope.todo.entries.length).toEqual(0);
+			addTodoItem("   "); // empty entry
+			expect(scope.todoList.entries.length).toEqual(0);
 		});
 
 	});
@@ -87,22 +80,22 @@ describe('TodoController', function() {
 			it('should remove an entry from the start of the list', function() {
 				scope.destroyTodo(first);
 
-				expect(scope.todo.entries.length).toBe(2);
-				expect(scope.todo.entries.indexOf(first)).toBe(-1);
+				expect(scope.todoList.entries.length).toBe(2);
+				expect(scope.todoList.entries.indexOf(first)).toBe(-1);
 			});
 
 			it('should remove an entry from the middle of the list', function() {
 				scope.destroyTodo(second);
 
-				expect(scope.todo.entries.length).toBe(2);
-				expect(scope.todo.entries.indexOf(second)).toBe(-1);
+				expect(scope.todoList.entries.length).toBe(2);
+				expect(scope.todoList.entries.indexOf(second)).toBe(-1);
 			});
 
 			it('should remove an entry from the end of the list', function() {
 				scope.destroyTodo(third);
 
-				expect(scope.todo.entries.length).toBe(2);
-				expect(scope.todo.entries.indexOf(third)).toBe(-1);
+				expect(scope.todoList.entries.length).toBe(2);
+				expect(scope.todoList.entries.indexOf(third)).toBe(-1);
 			});
 
 			it('should remove all three entries', function() {
@@ -110,13 +103,13 @@ describe('TodoController', function() {
 				scope.destroyTodo(second);
 				scope.destroyTodo(third);
 
-				expect(scope.todo.entries.length).toBe(0);
+				expect(scope.todoList.entries.length).toBe(0);
 			});
 
 			it('should silently ignore removal of non-existent entry', function() {
 				scope.destroyTodo({title : 'Nonesuch', completed: false});
 
-				expect(scope.todo.entries.length).toBe(3);
+				expect(scope.todoList.entries.length).toBe(3);
 			})
 		});
 
@@ -126,7 +119,7 @@ describe('TodoController', function() {
 
 			beforeEach(function() {
 				addTodoItem('Completed', true);
-				scope.todo.entries.push(completed);
+				scope.todoList.entries.push(completed);
 			});
 
 			beforeEach(inject(function($location) {
@@ -173,28 +166,28 @@ describe('TodoController', function() {
 		describe('removing completed items', function() {
 
 			it('should not change the entries list if no items are completed', function() {
-				var entryCount = scope.todo.entries.length;
+				var entryCount = scope.todoList.entries.length;
 				scope.clearCompleted();
-				expect(scope.todo.entries.length).toEqual(entryCount);
+				expect(scope.todoList.entries.length).toEqual(entryCount);
 			});
 
 			it('should remove only a completed entry', function() {
 				var completedEntry = addTodoItem("completed", true);
-				expect(scope.todo.entries).toContain(completedEntry);
+				expect(scope.todoList.entries).toContain(completedEntry);
 
 				scope.clearCompleted();
-				expect(scope.todo.entries).not.toContain(completedEntry)
+				expect(scope.todoList.entries).not.toContain(completedEntry)
 			});
 
 			it('should remove multiple completed entries', function() {
 				var entry1 = addTodoItem("entry1", true),
 					entry2 = addTodoItem("entry2", true);
-				expect(scope.todo.entries).toContain(entry1);
-				expect(scope.todo.entries).toContain(entry2);
+				expect(scope.todoList.entries).toContain(entry1);
+				expect(scope.todoList.entries).toContain(entry2);
 
 				scope.clearCompleted();
-				expect(scope.todo.entries).not.toContain(entry1);
-				expect(scope.todo.entries).not.toContain(entry2);
+				expect(scope.todoList.entries).not.toContain(entry1);
+				expect(scope.todoList.entries).not.toContain(entry2);
 			});
 
 			it('should have correct count of completed entries', function() {
@@ -228,26 +221,26 @@ describe('TodoController', function() {
 	describe('counts', function() {
 
 		it('should calculate 0 items remaining when there are no items in the list', function() {
-			expect(scope.todo.remaining).toEqual(0);
+			expect(scope.todoList.remaining).toEqual(0);
 		});
 
 		it('should recalculate items remaining after adding an item', function() {
 			addTodoItem();
-			expect(scope.todo.remaining).toEqual(1);
+			expect(scope.todoList.remaining).toEqual(1);
 		});
 
 		it('should recalculate items remaining after removing an item', function() {
 			var entry = addTodoItem();
 			scope.destroyTodo(entry);
 			scope.$apply();
-			expect(scope.todo.remaining).toEqual(0);
+			expect(scope.todoList.remaining).toEqual(0);
 		});
 
 		it('should recalculate items remaining after marking an entry as complete', function() {
 			var entry = addTodoItem();
 			entry.completed = true;
 			scope.$apply();
-			expect(scope.todo.remaining).toEqual(0);
+			expect(scope.todoList.remaining).toEqual(0);
 		});
 	});
 
