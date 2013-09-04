@@ -5,11 +5,23 @@ describe('TodoController', function() {
 
 	var scope, ctrl;
 
+	beforeEach(function() {
+		angular.mock.module('todo', function($provide) {
+			$provide.value('todoStorage', {
+				retrieveEntries: function () {
+					return [];
+				},
+				storeEntries: function (todoList) {
+				}
+			});
+		});
+	});
+
 	// Configure the injector with our root app module
 	beforeEach(module('todo'));
 
 	// Construct a controller with a self-created scope to interact with in tests
-	beforeEach(inject(function($controller, $rootScope) {
+	beforeEach(inject(function($injector, $controller, $rootScope) {
 
 		// Build a new, root-level scope that we can hold a handle to for testing purposes
 		scope = $rootScope.$new();

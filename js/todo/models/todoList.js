@@ -37,5 +37,6 @@ gTodo.factory("todoList", function(filterFilter) {
 		clearCompleted : function() {
 			this.entries = filterFilter(this.entries, { completed : false});
 		}
+
 	};
 });

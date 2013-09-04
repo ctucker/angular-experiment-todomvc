@@ -1,10 +1,15 @@
 /* global gTodo */
 'use strict';
 
-gTodo.controller('TodoController', function($scope, $location, todoList) {
+gTodo.controller('TodoController', function($scope, $location, todoStorage, todoList) {
 
-	$scope.newTodo = {};
+	todoList.entries = todoStorage.retrieveEntries();
 	$scope.todoList = todoList;
+
+	$scope.newTodo = {
+		title : ''
+	};
+
 	$scope.statusFilter = null;
 	$scope.location = $location;
 
@@ -14,6 +19,7 @@ gTodo.controller('TodoController', function($scope, $location, todoList) {
 
 	$scope.$watch('todoList', function() {
 		$scope.todoList.recalculateRemaining();
+		todoStorage.storeEntries(todoList.entries);
 	}, true);
 
 	$scope.$watch('location.path()', function(path) {
@@ -27,7 +33,6 @@ gTodo.controller('TodoController', function($scope, $location, todoList) {
 			$scope.statusFilter = null;
 		}
 	});
-
 
 	$scope.addTodo = function() {
 		todoList.addTodo($scope.newTodo.title);
@@ -53,6 +58,5 @@ gTodo.controller('TodoController', function($scope, $location, todoList) {
 	$scope.completedCount = function() {
 		return todoList.completedCount();
 	};
-
 
 });
