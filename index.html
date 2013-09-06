@@ -35,8 +35,8 @@
 			<footer id="footer" ng-show="hasEntries()" ng-cloak>
 				<!-- This should be `0 items left` by default -->
 				<span id="todo-count">
-                    <strong>{{ todo.remaining }}</strong>
-                    <ng-pluralize count="todo.remaining"
+                    <strong>{{ todoList.remaining }}</strong>
+                    <ng-pluralize count="todoList.remaining"
                                   when="{'one' : 'item left', 'other' : 'items left' }" >
                     </ng-pluralize>
                 </span>
