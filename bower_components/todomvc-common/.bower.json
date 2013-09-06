@@ -9,5 +9,6 @@
     "commit": "3caa4d6f6de2223b10bfc62065ed8da86a29af89"
   },
   "_source": "git://github.com/tastejs/todomvc-common.git",
-  "_target": "~0.1.4"
+  "_target": "~0.1.4",
+  "_originalSource": "todomvc-common"
 }
