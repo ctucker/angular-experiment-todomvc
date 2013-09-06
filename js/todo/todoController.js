@@ -5,6 +5,7 @@ gTodo.controller('TodoController', function($scope, $location, todoStorage, todo
 
 	todoList.entries = todoStorage.retrieveEntries();
 	$scope.todoList = todoList;
+	$scope.currentlyEditing = null;
 
 	$scope.newTodo = {
 		title : ''
@@ -58,5 +59,13 @@ gTodo.controller('TodoController', function($scope, $location, todoStorage, todo
 	$scope.completedCount = function() {
 		return todoList.completedCount();
 	};
+
+	$scope.editTodo = function(entry) {
+		$scope.currentlyEditing = entry;
+	}
+
+	$scope.submitTodo = function(entry) {
+		$scope.currentlyEditing = null
+	}
 
 });

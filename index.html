@@ -22,8 +22,12 @@
 				<label for="toggle-all">Mark all as complete</label>
 				<ul id="todo-list">
 					<!-- List items should get the class `editing` when editing and `completed` when marked as completed -->
-					<li ng-repeat="entry in todoList.entries | filter:statusFilter" ng-class="{completed : entry.completed}">
-                        <todo-entry></todo-entry>
+					<li ng-repeat="entry in todoList.entries | filter:statusFilter" ng-class="{completed : entry.completed, editing : entry == currentlyEditing}">
+                        <todo-entry entry="entry"
+                                    edit="editTodo(entry)"
+                                    destroy="destroyTodo(entry)"
+                                    update="submitTodo(entry)">
+                        </todo-entry>
 					</li>
 				</ul>
 			</section>

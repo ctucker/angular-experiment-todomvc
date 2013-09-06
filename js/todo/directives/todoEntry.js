@@ -5,6 +5,12 @@ gTodo.directive('todoEntry', function() {
 
 	return {
 		restrict: 'E',
-		templateUrl: "/js/todo/directives/todoEntry.html"
+		scope : {
+			entry : '=',
+			destroy : '&',
+			update : '&',
+			edit : '&'
+		},
+		templateUrl: "tpl/todoEntry.html"
 	};
 });

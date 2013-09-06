@@ -1,0 +1,8 @@
+<div class="view">
+    <input class="toggle" type="checkbox" ng-model="entry.completed">
+    <label ng-dblclick="edit(entry)">{{ entry.title }}</label>
+    <button class="destroy" ng-click="destroy({entry:entry})"></button>
+</div>
+<form ng-submit="submit({entry:entry})">
+    <input class="edit" ng-model="entry.title" ng-blur="update({entry:entry})">
+</form>
